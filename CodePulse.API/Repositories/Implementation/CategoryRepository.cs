@@ -40,4 +40,12 @@ public class CategoryRepository : ICategoryRepository
 
         return await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == categoryId);
     }
+    //write code to update category
+    public async Task<Category> UpdateAsync(Category category)
+    {
+        dbContext.Categories.Update(category);
+        await dbContext.SaveChangesAsync();
+
+        return category;
+    }
 }
