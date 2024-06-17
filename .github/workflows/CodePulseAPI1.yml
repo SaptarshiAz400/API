@@ -1,8 +1,10 @@
 name: Build and deploy .NET Core application to Web App CodePulseAPI1 with API Management Service CodePulseAPIManagement1-CodePulseAPI
+
 on:
   push:
     branches:
       - main
+
 env:
   AZURE_WEBAPP_NAME: CodePulseAPI1
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
@@ -20,58 +22,76 @@ env:
   DOTNET_CORE_VERSION: 7.0.x
   DOTNET_RUNTIME_VERSION: 3.0.x
   WORKING_DIRECTORY: .
+
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
       - name: Install .NET Core 3.0 Runtime
         run: |
           echo "Installing .NET Core 3.0 runtime"
           curl -L https://dotnetcli.azureedge.net/dotnet/Runtime/3.0.0/dotnet-runtime-3.0.0-win-x64.zip -o dotnet-runtime-3.0.0-win-x64.zip
           unzip -o dotnet-runtime-3.0.0-win-x64.zip -d $RUNNER_TEMP/dotnet-runtime-3.0.0
           export PATH=$RUNNER_TEMP/dotnet-runtime-3.0.0:$PATH
-      - name: Restore
+
+      - name: Restore dependencies
         run: dotnet restore ${{ env.WORKING_DIRECTORY }}
-      - name: Build
+
+      - name: Build the project
         run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
-      - name: Test
+
+      - name: Run tests
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
-      - name: Publish
+
+      - name: Publish the project
         run: dotnet publish ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
       - name: Install Swashbuckle CLI .NET Global Tool
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCKLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
+
       - name: Generate Open API Specification Document
         run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
+
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
   deploy:
     runs-on: windows-latest
     needs: build
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.CodePulseAPI1_390E }}
+
       - name: Azure Login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.CodePulseAPIManagement1_SPN }}
+
       - name: Import API into Azure API Management
         run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{ env.API_IMPORT_SPECIFICATION_PATH }}" --specification-format OpenApi --subscription-required false
+
       - name: Logout
         run: az logout
