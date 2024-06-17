@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: CodePulseAPI1
-  AZURE_WEBAPP_PACKAGE_PATH: .\publish
+  AZURE_WEBAPP_PACKAGE_PATH: ./publish
   AZURE_APIM_RESOURCE_PATH: /
   AZURE_APIM_RESOURCEGROUP: AngularProject1_group
   AZURE_APIM_SERVICENAME: CodePulseAPIManagement1
@@ -15,8 +15,8 @@ env:
   AZURE_APIM_APPSERVICEURL: https://codepulseapi1.azurewebsites.net
   SWASHBUCKLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 5.6.3
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
-  API_IMPORT_SPECIFICATION_PATH: .\publish\swagger.json
-  API_IMPORT_DLL: .\bin\Release\net7.0\CodePulse.API.dll
+  API_IMPORT_SPECIFICATION_PATH: ./publish/swagger.json
+  API_IMPORT_DLL: ./bin/Release/net7.0/CodePulse.API.dll
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
@@ -41,7 +41,7 @@ jobs:
           echo "Installing .NET Core 3.0 runtime"
           curl -L https://dotnetcli.azureedge.net/dotnet/Runtime/3.0.0/dotnet-runtime-3.0.0-win-x64.zip -o dotnet-runtime-3.0.0-win-x64.zip
           unzip -o dotnet-runtime-3.0.0-win-x64.zip -d $RUNNER_TEMP/dotnet-runtime-3.0.0
-          export PATH=$RUNNER_TEMP/dotnet-runtime-3.0.0:$PATH
+          echo "$RUNNER_TEMP/dotnet-runtime-3.0.0" >> $GITHUB_PATH
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.WORKING_DIRECTORY }}
