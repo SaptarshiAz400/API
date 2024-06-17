@@ -18,6 +18,7 @@ env:
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
+  DOTNET_RUNTIME_VERSION: 3.0.x
   WORKING_DIRECTORY: .
 jobs:
   build:
@@ -28,6 +29,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+      - name: Install .NET Core 3.0 Runtime
+        run: |
+          echo "Installing .NET Core 3.0 runtime"
+          curl -L https://dotnetcli.azureedge.net/dotnet/Runtime/3.0.0/dotnet-runtime-3.0.0-win-x64.zip -o dotnet-runtime-3.0.0-win-x64.zip
+          unzip -o dotnet-runtime-3.0.0-win-x64.zip -d $RUNNER_TEMP/dotnet-runtime-3.0.0
+          export PATH=$RUNNER_TEMP/dotnet-runtime-3.0.0:$PATH
       - name: Restore
         run: dotnet restore ${{ env.WORKING_DIRECTORY }}
       - name: Build
