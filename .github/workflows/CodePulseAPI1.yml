@@ -59,7 +59,10 @@ jobs:
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCKLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
 
       - name: Generate Open API Specification Document
-        run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
+        run: |
+          dotnet exec --runtimeconfig ./bin/Release/net7.0/CodePulse.API.runtimeconfig.json --depsfile ./bin/Release/net7.0/CodePulse.API.deps.json \
+          ./bin/Release/net7.0/swagger.dll tofile --output "./publish/swagger.json" --host "codepulseapi1.azurewebsites.net" --scheme "https" --base-path "/" "v1"
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
