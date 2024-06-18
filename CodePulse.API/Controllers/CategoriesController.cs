@@ -62,7 +62,7 @@ namespace CodePulse.API.Controllers
 
             return Ok(response);
         }
-        //write a method for GetCategoryById
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(string id)
         {
