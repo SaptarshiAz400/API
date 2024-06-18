@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App CodePulseAPI1 with API Management Service CodePulseAPIManagement1-CodePulseAPI
+name: Build and deploy .NET Core application
 
 on:
   push:
@@ -58,8 +58,8 @@ jobs:
       - name: Install Swashbuckle CLI .NET Global Tool
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCKLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
 
-      # - name: Generate Open API Specification Document
-      #   run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
+      - name: Generate Open API Specification Document
+        run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
 
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
@@ -91,7 +91,7 @@ jobs:
           publish-profile: ${{ secrets.CodePulseAPI1_390E }}
 
       - name: Import API into Azure API Management
-        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{ env.API_IMPORT_SPECIFICATION_PATH }}" --specification-format OpenApi --subscription-required false
+        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/swagger.json" --specification-format OpenApi --subscription-required false
 
       - name: Logout
         run: az logout
