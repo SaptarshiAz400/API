@@ -47,7 +47,7 @@ namespace CodePulse.API.Controllers
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
-            //wrrite code to map domain model to DTO
+            
 
             var response = new List<CategoryDto>();
             foreach (var category in categories)
