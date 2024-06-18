@@ -11,7 +11,7 @@ namespace CodePulse.API.Repositories.Interface
         //write a method for GetCategoryById
         Task<Category> GetByIdAsync(string id);
         //write a method for UpdateCategory
-        Task<Category> UpdateAsync(Category category);
+        Task<Category>? UpdateAsync(Category category);
 
     }
 }

@@ -81,27 +81,31 @@ namespace CodePulse.API.Controllers
 
             return Ok(response);
         }
-        //write a method for UpdateCategory
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateCategory([FromBody] UpdateCategoryRequestDto request)
-        //{
-        //    //map to domain model
-        //    var category = new Category
-        //    {
-        //        Id = Guid.Parse(request.id),
-        //        Name = request.Name,
-        //        UrlHandle = request.UrlHandle
-        //    };
-        //    await categoryRepository.UpdateAsync(category);
-        //    //domian model to DTO
-        //    var response = new CategoryDto
-        //    {
-        //        Id = category.Id,
-        //        Name = category.Name,
-        //        UrlHandle = category.UrlHandle
-        //    };
-        //    return Ok(response);
-        //}
+        //wriite a method for UpdateCategory 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCategory(string id, [FromBody] UpdateCategoryRequestDto request)
+        {
+            var category = await categoryRepository.GetByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            category.Name = request.Name;
+            category.UrlHandle = request.UrlHandle;
+
+            await categoryRepository.UpdateAsync(category);
+
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+
+            return Ok(response);
+        }
+
 
     }
 
