@@ -60,8 +60,7 @@ jobs:
 
       - name: Generate Open API Specification Document
         run: |
-          dotnet exec --runtimeconfig ./bin/Release/net7.0/CodePulse.API.runtimeconfig.json --depsfile ./bin/Release/net7.0/CodePulse.API.deps.json \
-          ./bin/Release/net7.0/swagger.dll tofile --output "./publish/swagger.json" --host "codepulseapi1.azurewebsites.net" --scheme "https" --base-path "/" "v1"
+          swagger tofile --output "./publish/swagger.json" "./bin/Release/net7.0/CodePulse.API.dll" "v1"
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
       - name: Publish Artifacts
