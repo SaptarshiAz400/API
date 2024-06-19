@@ -105,6 +105,27 @@ namespace CodePulse.API.Controllers
 
             return Ok(response);
         }
+        //write a method for DeleteCategory
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory(string id)
+        {
+            var category = await categoryRepository.GetByIdAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            await categoryRepository.DeleteAsync(category);
+            //convert domain model to dto
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+
+            return NoContent();
+        }
 
 
     }
