@@ -43,7 +43,7 @@ jobs:
 
         # Add this step to list the contents of the build output directory
       - name: List build output
-        run: ls ./bin/Release/net7.0/
+        run: Get-ChildItem -Path .\bin\Release\net7.0\ -Recurse
 
       - name: Run tests
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
