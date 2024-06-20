@@ -56,6 +56,9 @@ jobs:
       - name: Verify installed .NET tools
         run: dotnet tool list -g
 
+      - name: Restore .NET tools
+        run: dotnet tool restore
+
       - name: Generate Open API Specification Document
         run: |
            dotnet swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
