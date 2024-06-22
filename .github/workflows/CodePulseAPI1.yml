@@ -41,9 +41,11 @@ jobs:
       - name: Build the project
         run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
 
-        # Add this step to list the contents of the build output directory
+      # Add this step to list the contents of the build output directory
       - name: List build output
-        run: Get-ChildItem -Path .\bin\Release\net7.0\ -Recurse
+        run: |
+          echo "Listing the contents of the build output directory"
+          Get-ChildItem -Path ${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net7.0/ -Recurse
 
       - name: Run tests
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
