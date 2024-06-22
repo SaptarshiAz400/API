@@ -44,11 +44,12 @@ jobs:
         shell: pwsh
         run: |
           echo "Checking if the build output directory exists"
-          if (Test-Path -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/") {
+          $outputPath = "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/"
+          if (Test-Path -Path $outputPath) {
             echo "Listing the contents of the build output directory"
-            Get-ChildItem -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/" -Recurse
+            Get-ChildItem -Path $outputPath -Recurse
           } else {
-            echo "Build output directory does not exist."
+            echo "Build output directory does not exist: $outputPath"
             exit 1
           }
 
@@ -62,11 +63,12 @@ jobs:
         shell: pwsh
         run: |
           echo "Checking if the DLL exists after publish"
-          if (Test-Path -Path "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/CodePulse.API.dll") {
+          $dllPath = "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/CodePulse.API.dll"
+          if (Test-Path -Path $dllPath) {
             echo "DLL exists in publish directory"
             Get-ChildItem -Path "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/" -Recurse
           } else {
-            echo "DLL does not exist in publish directory"
+            echo "DLL does not exist in publish directory: $dllPath"
             exit 1
           }
 
