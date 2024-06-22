@@ -14,12 +14,11 @@ env:
   AZURE_APIM_API_ID: CodePulseAPI
   AZURE_APIM_APPSERVICEURL: https://codepulseapi1.azurewebsites.net
   SWASHBUCKLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.6.2
-  SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: ./publish/swagger.json
   API_IMPORT_DLL: ./bin/Release/net7.0/CodePulse.API.dll
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 6
+  DOTNET_CORE_VERSION: 7.0
   WORKING_DIRECTORY: .
 
 jobs:
@@ -41,7 +40,6 @@ jobs:
       - name: Build the project
         run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
 
-        # Add this step to list the contents of the build output directory
       - name: List build output
         run: Get-ChildItem -Path .\bin\Release\net7.0\ -Recurse
 
@@ -84,16 +82,6 @@ jobs:
         with:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-      - name: Install .NET Core 6.0 Runtime
-        run: |
-          echo "Installing .NET Core 6.0 runtime"
-          curl -L https://dotnet.microsoft.com/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer -o dotnet-install.ps1
-          .\dotnet-install.ps1 -InstallDir $env:RUNNER_TEMP\.dotnet -Runtime dotnet
-          echo "$env:RUNNER_TEMP\.dotnet" >> $env:GITHUB_PATH
-
-      - name: Verify .NET installation
-        run: dotnet --info
 
       - name: Azure Login
         uses: azure/login@v1
