@@ -43,6 +43,7 @@ jobs:
       - name: Check if build output directory exists
         shell: pwsh
         run: |
+          echo "Checking if the build output directory exists"
           if (Test-Path -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/") {
             echo "Listing the contents of the build output directory"
             Get-ChildItem -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/" -Recurse
@@ -56,6 +57,18 @@ jobs:
 
       - name: Publish the project
         run: dotnet publish ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      - name: Check if DLL exists after publish
+        shell: pwsh
+        run: |
+          echo "Checking if the DLL exists after publish"
+          if (Test-Path -Path "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/CodePulse.API.dll") {
+            echo "DLL exists in publish directory"
+            Get-ChildItem -Path "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/" -Recurse
+          } else {
+            echo "DLL does not exist in publish directory"
+            exit 1
+          }
 
       - name: Install Swashbuckle CLI .NET Global Tool
         run: |
