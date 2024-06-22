@@ -40,10 +40,15 @@ jobs:
       - name: Build the project
         run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
 
-      - name: List build output
+      - name: Check if build output directory exists
+        shell: pwsh
         run: |
-          echo "Listing the contents of the build output directory"
-          Get-ChildItem -Path ${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/ -Recurse
+          if (Test-Path -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/") {
+            echo "Listing the contents of the build output directory"
+            Get-ChildItem -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/" -Recurse
+          } else {
+            echo "Build output directory does not exist."
+          }
 
       - name: Run tests
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
