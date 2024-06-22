@@ -48,6 +48,7 @@ jobs:
             Get-ChildItem -Path "${{ env.WORKING_DIRECTORY }}/bin/${{ env.CONFIGURATION }}/net8.0/" -Recurse
           } else {
             echo "Build output directory does not exist."
+            exit 1
           }
 
       - name: Run tests
@@ -70,7 +71,12 @@ jobs:
 
       - name: Generate Open API Specification Document
         run: |
-           dotnet swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
+          if (Test-Path -Path "${{ env.API_IMPORT_DLL }}") {
+            dotnet swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
+          } else {
+            echo "API DLL not found at expected path: ${{ env.API_IMPORT_DLL }}"
+            exit 1
+          }
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
       - name: Publish Artifacts
