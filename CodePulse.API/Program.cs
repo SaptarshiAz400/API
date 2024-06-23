@@ -2,7 +2,6 @@ using CodePulse.API.Data;
 using CodePulse.API.Repositories.Implementation;
 using CodePulse.API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +19,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-//inject the blog post repository
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 var app = builder.Build();
@@ -28,8 +26,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage(); // Detailed error pages in development
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error"); // Custom error handling for production
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
@@ -41,8 +45,7 @@ app.UseCors(options =>
     options.AllowAnyMethod();
 });
 
-
-
+app.UseAuthorization();
 
 app.MapControllers();
 
