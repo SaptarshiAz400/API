@@ -57,7 +57,7 @@ app.UseCors(options =>
     options.AllowAnyMethod();
 });
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
