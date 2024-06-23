@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CodePulse.API.Controllers
 {
     
-    [Route("api/[controller]")]
+    [Route("/")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
