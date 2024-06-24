@@ -1,10 +1,7 @@
 ﻿using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTO;
 using CodePulse.API.Repositories.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CodePulse.API.Controllers
 {
@@ -36,7 +33,7 @@ namespace CodePulse.API.Controllers
             };
             //
             //write code to add the blog post to the database
-             blogPost=  await _blogPostRepository.CreateAsync(blogPost);
+            blogPost = await _blogPostRepository.CreateAsync(blogPost);
             //write code domain model to DTO
             var response = new BlogPostDTO
             {
@@ -122,7 +119,7 @@ namespace CodePulse.API.Controllers
 
             await _blogPostRepository.UpdateAsync(blogPost);
 
-       
+
 
             return NoContent();
         }

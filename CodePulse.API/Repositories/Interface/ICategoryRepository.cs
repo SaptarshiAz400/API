@@ -1,5 +1,4 @@
 ﻿using CodePulse.API.Models.Domain;
-using Microsoft.AspNetCore.Mvc;
 
 namespace CodePulse.API.Repositories.Interface
 {

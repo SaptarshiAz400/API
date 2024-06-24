@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodePulse.API.Repositories.Implementation
 {
-    public class BlogPostRepository:IBlogPostRepository
+    public class BlogPostRepository : IBlogPostRepository
     {
         //create
         //a constructor to inject the database context

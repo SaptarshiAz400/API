@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CodePulse.API.Models.Domain;
+﻿using CodePulse.API.Models.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodePulse.API.Data
 {

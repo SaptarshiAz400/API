@@ -1,14 +1,11 @@
-﻿using CodePulse.API.Data;
-using CodePulse.API.Models.Domain;
+﻿using CodePulse.API.Models.Domain;
 using CodePulse.API.Models.DTO;
 using CodePulse.API.Repositories.Interface;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodePulse.API.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -47,7 +44,7 @@ namespace CodePulse.API.Controllers
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
-            
+
 
             var response = new List<CategoryDto>();
             foreach (var category in categories)
@@ -62,7 +59,7 @@ namespace CodePulse.API.Controllers
 
             return Ok(response);
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(string id)
         {

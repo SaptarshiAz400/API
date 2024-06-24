@@ -41,7 +41,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage(); // Detailed error pages in development
 
-   
+
 }
 else
 {
