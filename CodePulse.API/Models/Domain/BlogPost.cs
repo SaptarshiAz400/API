@@ -12,6 +12,6 @@
         public string Author { get; set; }
         public bool IsVisible { get; set; }
 
-       // public ICollection<Category> Categorys { get; set; }
+        public ICollection<Category> Categorys { get; set; }
     }
 }
