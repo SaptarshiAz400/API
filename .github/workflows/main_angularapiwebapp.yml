@@ -62,5 +62,4 @@ jobs:
         with:
           app-name: 'AngularAPIWebApp'
           slot-name: 'Production'
-          package: .
-          
+          package: './myapp' # Corrected path to the downloaded artifact
